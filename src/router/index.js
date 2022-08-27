@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MovieShow from '../components/MovieShow.vue'
-import SeriesList from '../components/SerieList.vue'
+import SeriesView from '../views/SeriesView.vue'
 import ActorList from '../components/ActorList.vue'
 
 const router = createRouter({
@@ -13,12 +13,12 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/serie-list',
-      name: 'serie-list',
-      component: SeriesList
+      path: '/series',
+      name: 'series',
+      component: SeriesView
     },
     {
-      path: '/actor-list',
+      path: '/actors',
       name: 'actor-list',
       component: ActorList
     },

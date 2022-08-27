@@ -7,10 +7,10 @@
               <router-link to="/">Movies</router-link>
           </li>
          <li class="md:ml-6 mt-3 md:mt-0">
-           <router-link to="/serie-list">Series</router-link> 
+           <router-link to="/series">Series</router-link> 
          </li>
           <li class="md:ml-6 mt-3 md:mt-0">
-             <router-link to="/actor-list">Actors</router-link>
+             <router-link to="/actors">Actors</router-link>
           </li>
          
         </ul>
