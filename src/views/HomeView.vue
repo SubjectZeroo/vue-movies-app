@@ -6,9 +6,9 @@
        </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
           <div class="mt-8" v-for="movie in movies" :key="movie.id">
-            <a href="">
+            <router-link :to="{name: 'movie-detail', params: {id: movie.id}}">
                 <img :src="'https://image.tmdb.org/t/p/w500'+movie.poster_path" :alt="movie.original_title">
-            </a>
+            </router-link>
             <div class="mt-2">
                 <a href="" class="text-lg mt-2 hover:text-gray-300">
                 {{ movie.title }}
@@ -28,11 +28,12 @@
 </template>
 <script>
 import { ref } from "vue";
+import {API_URL, API_TOKEN} from "../config/env"
 export default {
     setup() {
         const movies = ref([]);
         fetch(
-          `http://api.themoviedb.org/3/movie/popular?api_key=aa5ed91c2023f45e0f1d530c535f41ec`
+          `${API_URL}/movie/popular?api_key=${API_TOKEN}`
         )
           .then((response) => response.json())
           .then((data) => {
