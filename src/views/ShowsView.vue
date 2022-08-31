@@ -6,9 +6,9 @@
        </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
           <div class="mt-8" v-for="show in shows" :key="show.id">
-            <a href="">
+            <router-link :to="{name: 'show-detail', params: {id: show.id}}">
                 <img :src="'https://image.tmdb.org/t/p/w500'+show.poster_path" :alt="show.name">
-            </a>
+            </router-link>
             <div class="mt-2">
                 <a href="" class="text-lg mt-2 hover:text-gray-300">
                 {{ show.name }}
