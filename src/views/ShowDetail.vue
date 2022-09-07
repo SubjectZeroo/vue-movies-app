@@ -23,6 +23,38 @@
           </div>
       </div>
     </div>
+    <div class="movie-cast border-b border-gray-">
+        <div class="container mx-auto px-4 py-16">
+            <h2 class="text-4xl font-semibold">Cast</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                <div class="mt-8" v-for="actor in actors.cast" :key="actor.id">
+                    <router-link :to="{name: 'actor-detail', params: {id: actor.id}}">
+                        <img :src="'https://image.tmdb.org/t/p/w500'+actor.profile_path" alt="" class="hover:opacity-75 transition ease in-out duration-150">    
+                    </router-link>
+                    <div class="mt-2">
+                        <router-link :to="{name: 'actor-detail', params: {id: actor.id}}">
+                            {{ actor.name }}
+                        </router-link>
+                        <div class="text-sm text-gray-">
+                            {{ actor.character }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="movie-images">
+        <div class="container mx-auto px-4 py-16">
+            <h2 class="text-4xl font-semibold">Images</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                <div class="mt-8"  v-for="image in images.backdrops" :key="image.id">
+                    <a href="#">
+                        <img :src="'https://image.tmdb.org/t/p/w500'+image.file_path" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
   </template>
   
   <script>
@@ -32,6 +64,8 @@
       data() {
           return {
               serie: {},
+              actors:{},
+              images:{},
           };
       },
       mounted() {
@@ -40,7 +74,21 @@
           )
           .then((response) => response.json())
           .then((data) => (this.serie = data))
-          .catch((err) => console.log(err))
+          .catch((err) => console.log(err));
+
+          fetch(
+            `${API_URL}/tv/${this.id}/credits?api_key=${API_TOKEN}`
+            )
+            .then((response) => response.json())
+            .then((data) => (this.actors= data))
+            .catch((err) => console.log(err));
+
+            fetch(
+            `${API_URL}/tv/${this.id}/images?api_key=${API_TOKEN}`
+            )
+            .then((response) => response.json())
+            .then((data) => (this.images= data))
+            .catch((err) => console.log(err))
       },
   };
   </script>
