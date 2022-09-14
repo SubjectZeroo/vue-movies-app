@@ -18,9 +18,16 @@
                 </div>
                 <p class="text-gray-300 mt-8">{{ movie.overview }}</p>
                 <div class="mt-12">
-                    <h4 class="text-white font-semibold"></h4>
+                    <h4 class="text-white font-semibold">
+                        Featured Crew
+                    </h4>
                     <div class="flex mt-4">
-                        <div class="mr-8"></div>
+                        <div class="mr-8" v-for="crew in teams.crew.slice(0, 2) " :key="crew.id">
+                            <div>
+                                {{ crew.name }}
+                            </div>
+                            <div class="text-sm text-gray-400">{{ crew.job }}</div>
+                        </div>
                     </div>
                 </div>
         </div>
@@ -30,7 +37,7 @@
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Cast</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-            <div class="mt-8" v-for="actor in actors.cast" :key="actor.id">
+            <div class="mt-8" v-for="actor in teams.cast.slice(0, 5) " :key="actor.id">
                 <router-link :to="{name: 'actor-detail', params: {id: actor.id}}">
                     <img :src="'https://image.tmdb.org/t/p/w500'+actor.profile_path" alt="" class="hover:opacity-75 transition ease in-out duration-150">    
                 </router-link>
@@ -50,7 +57,7 @@
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Images</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <div class="mt-8"  v-for="image in images.backdrops" :key="image.id">
+            <div class="mt-8"  v-for="image in images" :key="image.id">
                 <a href="#">
                     <img :src="'https://image.tmdb.org/t/p/w500'+image.file_path" alt="">
                 </a>
@@ -67,7 +74,7 @@ export default {
     data() {
         return {
             movie: {},
-            actors:{},
+            teams:{},
             images:{},
         };
     },
@@ -84,7 +91,7 @@ export default {
             `${API_URL}/movie/${this.id}/credits?api_key=${API_TOKEN}`
         )
         .then((response) => response.json())
-        .then((data) => (this.actors= data))
+        .then((data) => (this.teams = data))
         .catch((err) => console.log(err))
 
 
@@ -92,8 +99,9 @@ export default {
             `${API_URL}/movie/${this.id}/images?api_key=${API_TOKEN}`
         )
         .then((response) => response.json())
-        .then((data) => (this.images= data))
-        .catch((err) => console.log(err))
+        .then(data => {
+               this.images = data.backdrops.slice(0, 9) 
+        }).catch((err) => console.log(err))
     },
 };
 </script>
