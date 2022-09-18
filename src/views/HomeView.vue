@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 pt-16">
+  <div class="container mx-auto px-4 pt-16 py-24">
     <div class="popular-movies">
       <div class="uppercase tracking-wider text-orange-500 text-lg font-semibold">
         Popular Movies
@@ -19,7 +19,6 @@
                   <span class="mx-2">|</span>
                   <span>{{ movie.release_date }}</span>
                 </div>
-                <!-- <div class="text-gray-400 text-sm"> {{ movie.genres }} </div> -->
             </div>
           </div>
       </div>
