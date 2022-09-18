@@ -12,14 +12,31 @@
                       <div class="mx-2">|</div>
                       <span>{{ serie.first_air_date }}</span>
                       <span class="mx-2">|</span>
+                    <span v-for="genre in serie.genres" :key="genre.id">
+                        {{ genre.name }}, 
+                    </span>
                   </div>
                   <p class="text-gray-300 mt-8">{{ serie.overview }}</p>
                   <div class="mt-12">
-                      <h4 class="text-white font-semibold"></h4>
-                      <div class="flex mt-4">
-                          <div class="mr-8"></div>
-                      </div>
-                  </div>
+                    <h4 class="text-white font-semibold">
+                        Featured Crew
+                    </h4>
+                    <div class="flex mt-4">
+                        <div class="mr-8" v-for="team in teams" :key="team.id">
+                            <div>
+                                {{ team.name }}
+                            </div>
+                            <div class="text-sm text-gray-400">{{ team.job }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <MyModal>
+                        <template v-slot:iframe>
+                            <iframe  class="responsive-iframe absolute top-0 left-0 w-full h-full" :src="'https://www.youtube.com/embed/'+trailer[0].key" style="border-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </template>
+                    </MyModal>
+                </div>
           </div>
       </div>
     </div>
@@ -27,7 +44,7 @@
         <div class="container mx-auto px-4 py-16">
             <h2 class="text-4xl font-semibold">Cast</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                <div class="mt-8" v-for="actor in actors.cast" :key="actor.id">
+                <div class="mt-8" v-for="actor in actors" :key="actor.id">
                     <router-link :to="{name: 'actor-detail', params: {id: actor.id}}">
                         <img :src="'https://image.tmdb.org/t/p/w500'+actor.profile_path" alt="" class="hover:opacity-75 transition ease in-out duration-150">    
                     </router-link>
@@ -47,7 +64,7 @@
         <div class="container mx-auto px-4 py-16">
             <h2 class="text-4xl font-semibold">Images</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                <div class="mt-8"  v-for="image in images.backdrops" :key="image.id">
+                <div class="mt-8"  v-for="image in images" :key="image.id">
                     <a href="#">
                         <img :src="'https://image.tmdb.org/t/p/w500'+image.file_path" alt="">
                     </a>
@@ -59,13 +76,17 @@
   
   <script>
   import {API_URL, API_TOKEN} from "../config/env"
+  import MyModal from "../components/MyModal.vue";
   export default {
+      components: { MyModal },
       props: ["id"],
       data() {
           return {
               serie: {},
+              teams:{},
               actors:{},
               images:{},
+              trailer:{}
           };
       },
       mounted() {
@@ -80,15 +101,28 @@
             `${API_URL}/tv/${this.id}/credits?api_key=${API_TOKEN}`
             )
             .then((response) => response.json())
-            .then((data) => (this.actors= data))
-            .catch((err) => console.log(err));
+            .then(data => {
+            this.actors = data.cast.slice(0, 5) 
+            this.teams = data.crew.slice(0, 2) 
+            }).catch((err) => console.log(err));
 
             fetch(
             `${API_URL}/tv/${this.id}/images?api_key=${API_TOKEN}`
             )
             .then((response) => response.json())
-            .then((data) => (this.images= data))
-            .catch((err) => console.log(err))
+            .then(data => {
+               this.images = data.backdrops.slice(0, 9) 
+            }).catch((err) => console.log(err))
+
+
+            fetch(
+            `${API_URL}/tv/${this.id}/videos?api_key=${API_TOKEN}`
+            )
+            .then((response) => response.json())
+            .then(data => {
+                    this.trailer = data.results.filter(el => el.name.includes('Official Trailer'));
+                    console.log(this.trailer)
+            }).catch((err) => console.log(err))
       },
   };
   </script>
