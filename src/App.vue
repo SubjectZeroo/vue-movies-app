@@ -1,7 +1,7 @@
 <template>
   <main class="font-sans bg-gray-900 text-white">
      <NavBar />
-     <router-view />
+     <router-view :key="$route.path"/>
      <MyFooter />
   </main>
  
